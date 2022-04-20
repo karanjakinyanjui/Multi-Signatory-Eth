@@ -39,11 +39,11 @@ contract Wallet {
         return transfers;
     }
 
-    function createTransfer(uint amount, address payable to) external{
+    function createTransfer(uint _amount, address payable _to) external onlyApprovers() {
         transfers.push(Transfer(
             transfers.length,
-            amount,
-            to,
+            _amount,
+            _to,
             0,
             false
         ));
@@ -57,11 +57,11 @@ contract Wallet {
         transfers[id].approvals++;
 
         if(transfers[id].approvals >= quorum){
-            transfers[id].sent == true;
+            transfers[id].sent = true;
             address payable to = transfers[id].to;
             to.transfer(transfers[id].amount);
         }
     }
-
-    recieve() external payable{}
+    
+    receive() external payable{}
 }
